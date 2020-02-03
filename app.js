@@ -6,9 +6,12 @@ const pop_size = 10
 const parents = 2
 const mutation_probability = 0.5
 
+
+//Funcao de numeros aleatorios
 function randint(min, max) { // min and max included 
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
+
 
 function individual(min, max){
 	var ind = {'r':0,'g':0,'b':0};
@@ -42,22 +45,29 @@ function fitness(ind,max){
 }
 
 function selection_and_crossover(population){
-	scored = []
-	pop_gen = []
+	scored = [] //População com Scored
+	pop_gen = [] //Scored Organizado
 	var selected
-	//console.log(population)
+
+	//Medir Fitness
 	for(var i in population){
 		//console.log(fitness(population[i],255))
 		var j = [Number((fitness(population[i],255)).toFixed(2)),population[i]]
 		scored.push(j)
 	}
 
+	console.log(scored)
+
+	//Organizar Maior-Menor
 	for(var i in scored.sort()){
 		pop_gen.push(scored[i][1])
 	}
 	
 	scored = pop_gen
-	selected = scored[]
+	selected = scored.slice(Object.keys(scored).length-parents)
+
+	console.log(scored)
+	return selected;
 
 }
 
