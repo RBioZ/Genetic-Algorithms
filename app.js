@@ -59,15 +59,15 @@ function fitness(ind,max){
 function selection_and_crossover(population){
 	var scored = [] //População com Scored
 	var pop_gen = [] //Scored Organizado
-	var selected;
-	var escopo = {r:0,g:1,b:2};
+	var selected //Individuos Selecionados;
 
-	console.log(population)
 	//Medir Fitness
 	for(var i in population){
 		var j = [Number((fitness(population[i],255)).toFixed(2)),population[i]]
 		scored.push(j)
 	}
+
+	console.log(scored)
 
 	//console.log(scored)
 
@@ -106,5 +106,4 @@ function selection_and_crossover(population){
 }
 
 
-console.log(fitness(individual(3,0,255),255))
-console.log(fitness([100,100,100],255))
+console.log(selection_and_crossover(population(5,3,0,255)))
