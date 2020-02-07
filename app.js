@@ -24,27 +24,28 @@ function sample(arr, size) {
 }
 
 
-function individual(min, max){
-	var ind = {'r':0,'g':0,'b':0};
-	for(var i in ind){
-		ind[i] = randint(min,max);
+function individual(size,min, max){
+	var ind = [];
+	for(var i = 0; i < size; i++){
+		ind.push(randint(min,max));
 	}
 	return ind;
 }
 
-function population(size){
-	var j = {};
-	for(var i = 0; i < size; i++){
+function population(pop,size,min,max){
+	var j = [];
+	for(var i = 0; i < pop; i++){
 		//console.log(individual(0,255))
-		j[i] = individual(0,255);
+		j.push(individual(size,min,max));
 	}
 	return j;
 }
 
 function fitness(ind,max){
 
+	console.log(ind)
 	var fit_points = 100;
-	var size= Object.keys(ind).length; 
+	var size= ind.length; 
 	var fit = 0;
 
 	for(var i in ind){
@@ -59,12 +60,16 @@ function selection_and_crossover(population){
 	var scored = [] //População com Scored
 	var pop_gen = [] //Scored Organizado
 	var selected;
+	var escopo = {r:0,g:1,b:2};
 
+	console.log(population)
 	//Medir Fitness
 	for(var i in population){
 		var j = [Number((fitness(population[i],255)).toFixed(2)),population[i]]
 		scored.push(j)
 	}
+
+	//console.log(scored)
 
 	//Organizar Maior-Menor
 	for(var i in scored.sort()){
@@ -73,27 +78,33 @@ function selection_and_crossover(population){
 	
 	scored = pop_gen
 	selected = scored.slice(Object.keys(scored).length-parents)
-/*
+
 	for(var i = 0; i < Object.keys(population).length; i++){
+
+
 		point = randint(1, ind_size - 1)
 		parent = sample(selected,2)
-
-		for(var j = 0;j < ind_size; j++){
-			if(i >= point){
+		
+		//console.log(population[i])
+//		console.log(point)
+		//console.log(parent)
+		//console.log('------------------------------------------------')
+		
+		for(var j in escopo){
+			if(escopo[j] >= point){
 				population[i][j] = parent[0][j]
 			}	
 			else{
 				population[i][j] = parent[1][j]
-			}
-		}	
+			}		
+		}		
 	}
 
-*/
+
 	return population;
 	
 }
 
-//console.log(population(pop_size))
-//console.log(fitness(individual(0,255),255))
 
-console.log(selection_and_crossover(population(5)))
+console.log(fitness(individual(3,0,255),255))
+console.log(fitness([100,100,100],255))
