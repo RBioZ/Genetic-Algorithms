@@ -7,7 +7,7 @@ const parents = 2
 const mutation_probability = 0.5
 const ind_size = 3
 
-//Funcao de numeros aleatorios
+//------------------------------------------------------------------------------
 function randint(min, max) { // min and max included 
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
@@ -22,37 +22,36 @@ function sample(arr, size) {
     }
     return shuffled.slice(0, size);
 }
+//-------------------------------------------------------------------------------
 
-
-function individual(min, max){
-	var ind = {'r':0,'g':0,'b':0};
-	for(var i in ind){
+function individual(ind_size,min, max){
+	ind = []
+	for(var i  = 0; i < ind_size; i++){
 		ind[i] = randint(min,max);
 	}
 	return ind;
 }
 
-function population(size){
-	var j = {};
+function population(size,ind_size,min, max){
+	var pop = [];
 	for(var i = 0; i < size; i++){
 		//console.log(individual(0,255))
-		j[i] = individual(0,255);
+		pop.push(individual(ind_size,min, max));
 	}
-	return j;
+	return pop;
 }
 
+//Calculo de Fitness
 function fitness(ind,max){
 
 	var fit_points = 100;
 	var size= Object.keys(ind).length; 
 	var fit = 0;
 
-	for(var i in ind){
-		//console.log(ind[i]+" : "+(ind[i]*100)/max)
-		//console.log(((ind[i]*1)/max)*(fit_points/size)+"\n")
+	for(var i = 0; i < size; i++){
 		fit += ((ind[i]*1)/max)*(fit_points/size)
 	}
-	return fit_points-fit;
+	return Number((fit_points-fit).toFixed(2));
 }
 
 function selection_and_crossover(population){
@@ -60,40 +59,60 @@ function selection_and_crossover(population){
 	var pop_gen = [] //Scored Organizado
 	var selected;
 
+	console.log("1- Population")
+	console.log(population)
+
 	//Medir Fitness
 	for(var i in population){
 		var j = [Number((fitness(population[i],255)).toFixed(2)),population[i]]
 		scored.push(j)
 	}
+	console.log('2- Scored')
+	console.log(scored)
 
 	//Organizar Maior-Menor
 	for(var i in scored.sort()){
 		pop_gen.push(scored[i][1])
 	}
 	
+	console.log('3 - Organization')
+	console.log(pop_gen)
+
 	scored = pop_gen
 	selected = scored.slice(Object.keys(scored).length-parents)
-/*
+
+	console.log('4 - Selected (Parents)')
+	console.log(selected)
+
 	for(var i = 0; i < Object.keys(population).length; i++){
 		point = randint(1, ind_size - 1)
 		parent = sample(selected,2)
-
+		
+		console.log('5 - Point and Parents')
+		console.log(point)
+		console.log(parent)
+		
 		for(var j = 0;j < ind_size; j++){
-			if(i >= point){
+			if(j >= point){
+				//console.log(population[i][j])
+				//console.log(parent[0][j])
+				console.log('j: '+j+' Point: '+point)
 				population[i][j] = parent[0][j]
-			}	
+				console.log(parent[0])
+			}	 
 			else{
+				//console.log(population[i][j])
+				//console.log(parent[1][j])
+				console.log('j: '+j+' Point: '+point)
 				population[i][j] = parent[1][j]
+				console.log(parent[1])
 			}
 		}	
 	}
 
-*/
 	return population;
 	
 }
 
-//console.log(population(pop_size))
-//console.log(fitness(individual(0,255),255))
 
-console.log(selection_and_crossover(population(5)))
+console.log(selection_and_crossover(population(5,3,0,255)))
