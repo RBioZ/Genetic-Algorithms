@@ -1,11 +1,19 @@
+/*
 
+.....:::::GENETIC ALGORITHMS:::::.....
+
+#CREATE BY: JONATHAN RYAN DA SILVA (RBIOZ)
+#DATE: 01/02/2020 - 09/02/2020
+
+
+*/
 
 // Variaveis
 
-const pop_size = 10
+const population_size = 10
 const parents = 2
 const mutation_probability = 0.5
-const ind_size = 3
+const individual_size = 3
 
 //------------------------------------------------------------------------------
 function randint(min, max) { // min and max included 
@@ -24,6 +32,7 @@ function sample(arr, size) {
 }
 //-------------------------------------------------------------------------------
 
+//Individuo
 function individual(ind_size,min, max){
 	ind = []
 	for(var i  = 0; i < ind_size; i++){
@@ -32,6 +41,7 @@ function individual(ind_size,min, max){
 	return ind;
 }
 
+//Populacao
 function population(size,ind_size,min, max){
 	var pop = [];
 	for(var i = 0; i < size; i++){
@@ -55,86 +65,56 @@ function fitness(ind,max){
 	return Number((fit_points-fit).toFixed(2));
 }
 
+//Selecao e Crossover
 function selection_and_crossover(population){
 	var scored = [] //População com Scored
 	var pop_gen = [] //Scored Organizado
 	var selected //Individuos Selecionados;
 
-	//console.log("1- Population")
-	//console.log(population)
-
-	//Medir Fitness
+	//Ranquear Individuos
 	for(var i in population){
 		var j = [Number((fitness(population[i],255)).toFixed(2)),population[i]]
 		scored.push(j)
 	}
-	//console.log('2- Scored')
-	//console.log(scored)
 
-	//console.log(scored)
-
-	//console.log(scored)
-
-	//Organizar Maior-Menor
+	//Organizar conforme Score
 	for(var i in scored.sort()){
 		pop_gen.push(scored[i][1])
 	}
-	
-	//console.log('3 - Organization')
-	//console.log(pop_gen)
 
+	//Selecionar Parents(Pais)
 	scored = pop_gen
 	selected = scored.slice(Object.keys(scored).length-parents)
+	
+	//Variavel de retorno
+	var k = []
 
-	//console.log('4 - Selected (Parents)')
-	console.log(selected)
+	//Criar populacao Vazia
+	for(var p in population){
+		k.push([0,0,0])
+	}
 
+	//Crossover no material Genetico
 	for(var i = 0; i < population.length; i++){
 
-
-		point = randint(1, ind_size - 1)
-		parent = Math.floor(Math.random()*10)
-		
-		console.log(parent)
-		
-
-		if(parent <= 5){
-			parent = []
-			parent[0] = selected[0]
-			parent[1] = selected[1]
-		}
-		else{
-			parent = []
-			parent[0] = selected[1]
-			parent[1] = selected[0]
-		}
-		
-		console.log('\nSelected')
-		console.log(selected)
-		console.log('\nParent')
+		var point = randint(1, individual_size - 1)
+		var parent = sample(selected,2)
 		console.log(parent)
 
-		for(var j = 0;j < ind_size; j++){
-			if(j >= point){
-				//console.log(population[i][j])
-				//console.log(parent[0][j])
-				//console.log('j: '+j+' Point: '+point)
-				population[i][j] = parent[0][j]
-				//console.log(parent[0])
+		for(var j = 0;j < individual_size; j++){
+
+			if(j < point){
+				k[i][j] = parent[0][j]
 			}	 
 			else{
-				//console.log(population[i][j])
-				//console.log(parent[1][j])
-				//console.log('j: '+j+' Point: '+point)
-				population[i][j] = parent[1][j]
-				//console.log(parent[1])
+				k[i][j] = parent[1][j]
 			}
 		}	
 	}
-
-	return population;
-	
+	return k;
 }
 
 
-console.log(selection_and_crossover(population(5,ind_size,0,255)))
+
+
+console.log(selection_and_crossover(population(10,individual_size,0,255)))
