@@ -11,9 +11,10 @@
 const population_size = 10
 const individual_size = 3
 const parents = 2
-const mutation_probability = 0.2
+const mutation_probability = 0.5
 const min = 0;
 const max = 255;
+const m_range = 10
 
 //------------------------------------------------------------------------------
 function randint(min, max) { // min and max included 
@@ -123,7 +124,13 @@ function mutation(population){
 	for(var x in population){
 		for(var y in population[x]){
 			if(Math.random() < mutation_probability){
-				new_population[x][y] = randint(0,255)
+				new_population[x][y] = new_population[x][y]+randint(-m_range,m_range)
+				if(new_population[x][y] < 0){
+					new_population[x][y] = 0;
+				}
+				else if(new_population[x][y] > 255){
+					new_population[x][y] = 255;
+				}
 			}
 			else{
 				new_population[x][y] = population[x][y]
@@ -139,10 +146,12 @@ population = create_population()
 console.log("População Inicial: ")
 console.log(population)
 
-for(var i = 0; i <= 100; i++){
+for(var i = 0; i <= 10; i++){
+	console.log('\n\n Geração: '+i)
+	console.log(population)
 	population = selection_and_crossover(population)
 	population = mutation(population)
 }
 
-console.log("População Final: ")
+console.log("\n\n\nPopulação Final: ")
 console.log(population)
